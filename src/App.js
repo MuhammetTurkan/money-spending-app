@@ -3,33 +3,50 @@ import "./App.css";
 import Header from "./components/Header";
 import products from "./components/products.json";
 import Product from "./components/Product";
+import Basket from "./components/Basket";
 
 function App() {
-  const [money, setMoney] = useState(100);
+  const [money, setMoney] = useState(5000);
   const [basket, setBasket] = useState([]);
   const [total, setTotal] = useState(0);
 
+  const resetBasket = () => {
+    setBasket([]);
+  };
   useEffect(() => {
-    const ttl = basket.reduce((acc, item) => {
-      return (
-        acc +
-        item.amount * products.find((product) => product.id === item.id).price
-      );
-    }, 0);
-    console.log(ttl);
+    setTotal(
+      basket.reduce((acc, item) => {
+        return (
+          acc +
+          item.amount * products.find((product) => product.id === item.id).price
+        );
+      }, 0)
+    );
   }, [basket]);
 
   return (
     <>
-      <Header money={money} />
-      {products.map((product) => (
-        <Product
+      <Header total={total} money={money} />
+      <div className="container products">
+        {products.map((product) => (
+          <Product
+            total={total}
+            money={money}
+            basket={basket}
+            setBasket={setBasket}
+            product={product}
+            key={product.id}
+          />
+        ))}
+      </div>
+      {total > 0 && (
+        <Basket
           basket={basket}
-          setBasket={setBasket}
-          product={product}
-          key={product.id}
+          products={products}
+          total={total}
+          resetBasket={resetBasket}
         />
-      ))}
+      )}
     </>
   );
 }

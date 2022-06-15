@@ -1,7 +1,8 @@
 import React from "react";
 
-function Product({ product, basket, setBasket }) {
+function Product({ product, basket, setBasket, total, money }) {
   const basketItem = basket.find((item) => item.id === product.id);
+  const checkMoney = total + product.price > money;
   const addBasket = () => {
     const checkBasket = basket.find((item) => item.id === product.id);
     if (checkBasket) {
@@ -39,26 +40,23 @@ function Product({ product, basket, setBasket }) {
 
   return (
     <>
-      <div className="product">
+      <div className="productss">
+        <img src={product.image}></img>
         <h5>{product.title}</h5>
         <div className="price">$ {product.price}</div>
         <div className="action">
-          <button disabled={!basketItem} onClick={removeBasket}>
+          <button
+            className="sell-btn"
+            disabled={!basketItem}
+            onClick={removeBasket}
+          >
             Sat
           </button>
           <span className="amount">{basketItem ? basketItem.amount : 0}</span>
-          <button onClick={addBasket}>Satın Al</button>
+          <button className="buy-btn" disabled={checkMoney} onClick={addBasket}>
+            Satın Al
+          </button>
         </div>
-        <style jsx="true">
-          {`
-            .product {
-              padding: 10px;
-              background: #fff;
-              border: 1px solid #ddd;
-              margin-bottom: 20px;
-            }
-          `}
-        </style>
       </div>
     </>
   );
